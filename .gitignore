@@ -1,0 +1,8 @@
+.env
+**/.DS_Store
+mysql_data/
+prometheus_data/
+grafana_data/
+loki_data/
+tempo_data/
+.idea

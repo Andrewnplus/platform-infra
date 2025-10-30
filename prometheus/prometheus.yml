@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # 抓 MySQL exporter
+  - job_name: 'mysqld-exporter'
+    static_configs:
+      - targets: ['mysqld_exporter:9104']
+
+  # 抓 OTel Collector 暴露的彙整 metrics
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel-collector:8889']
+
+  # 之後你也可直接抓各應用的 /metrics
+  # - job_name: 'paper-api'
+  #   static_configs:
+  #     - targets: ['paper-api:8080']

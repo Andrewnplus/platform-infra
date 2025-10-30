@@ -1,0 +1,34 @@
+name: Lint Configurations
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install linters
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y yamllint shellcheck jq
+          curl -sSL https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64 -o /usr/local/bin/hadolint
+          chmod +x /usr/local/bin/hadolint
+
+      - name: YAML Lint
+        run: |
+          echo "Running yamllint..."
+          yamllint .
+
+      - name: Dockerfile Lint
+        run: |
+          echo "Running hadolint..."
+          find . -type f -name 'Dockerfile' -print0 | xargs -0 -I {} hadolint {}
+
+      - name: Shell/Makefile Lint
+        run: |
+          echo "Running shellcheck..."
+          if [ -f Makefile ]; then shellcheck Makefile || true; fi
+          find . -type f -name '*.sh' -exec shellcheck {} + || true
